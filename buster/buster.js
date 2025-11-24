@@ -28,7 +28,7 @@ async function get(host, path="/") {
 }
 
 //Note. a function must be async to use await
-async function main(host, prefix_file, wordlist_file, delay=128) {
+async function main(host, prefix_file, wordlist_file, connections=128) {
   let prefixes = await readconf(prefix_file);
   let suffixes = await readconf(wordlist_file)
   let paths = [];
@@ -38,9 +38,8 @@ async function main(host, prefix_file, wordlist_file, delay=128) {
     }
   }
   console.log(`Number of urls to try: ${paths.length}. Hold on.`);
-  const limit = pLimit(delay);
-  const r = await Promise.allSettled(paths.map(path => 
-    limit(() => get(host, path))));
+  const limit = pLimit(connections);
+  const r = await Promise.allSettled(paths.map(path => limit(() => get(host, path))));
   return r;
 }
 
