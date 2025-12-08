@@ -36,7 +36,7 @@ public class App {
     	// "/" makes it the default servlet
     	// "" just matches the root
     	// "*.do" matches the extension - need to use the wildcard API
-    	collaboratorDynamicApp.addServletMappingDecoded("", "collaboratorDynamic");
+    	collaboratorDynamicApp.addServletMappingDecoded("/", "collaboratorDynamic");
     	
     	// In this example 'static' is relative to the app working directory
     	Context collaboratorStaticApp = tomcat.addWebapp("/cs", new File("static").getAbsolutePath());

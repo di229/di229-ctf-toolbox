@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	</head>
+	<body onload="update()">
+		<main>
+			<iframe id="mqif.000" src="http://127.0.2.1:8080/cs/foo.do"></iframe>
+			<textarea id="mqtext.000">wait</textarea>
+			<script>
+				function update() {
+					const textbox = document.getElementById("mqtext.000");
+					const frame = document.getElementById("mqif.000");
+					const doc = frame.contentDocument;
+					if (doc) {
+						const de = doc.documentElement;
+						if (de) {
+							const html = de.innerHTML;
+							textbox.innerHTML = html;
+							const href = doc.location.href;
+							
+							const outUrl = `http://127.0.2.1:8080/cd/mq?key=abcd&page=${href}&contents=${html}`;
+							console.log(href);
+							const req = new XMLHttpRequest();
+							req.open("GET", outUrl);
+							req.send();
+
+						}
+					}
+				}
+			</script>
+		</main>
+	</body>
+</html>
