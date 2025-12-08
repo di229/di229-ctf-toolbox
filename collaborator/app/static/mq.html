@@ -21,7 +21,7 @@
 							textbox.innerHTML = html;
 							const href = doc.location.href;
 							
-							const outUrl = `http://127.0.2.1:8080/cd/mq?key=abcd&page=${href}&contents=${html}`;
+							const outUrl = `http://127.0.2.1:8080/cd/mq?key=abcd&page=${encodeURIComponent(href)}&contents=${encodeURIComponent(html)}`;
 							console.log(href);
 							const req = new XMLHttpRequest();
 							req.open("GET", outUrl);
