@@ -24,6 +24,9 @@ public class DynamicCollaboratorServlet extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException {
+
+		resp.setHeader("Access-Control-Allow-Origin", "*");
+
 		if ("/mq.js".compareTo(req.getServletPath()) == 0) {
 			resp.setContentType("text/javascript; encoding=UTF-8");
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -38,10 +41,18 @@ public class DynamicCollaboratorServlet extends HttpServlet {
 			resp.setContentLength(size);
 			bos.writeTo(out);
 		}
+	}
+
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
 		if ("/mq".compareTo(req.getServletPath()) == 0) {
 			String pageName = req.getParameter("page");
 			String contents = req.getParameter("contents");
 			String key = req.getParameter("key");
+			if (pageName.length() > 7 && pageName.substring(0, 7).compareTo("http://") == 0) {
+				pageName = pageName.substring(7);
+			} else if (pageName.length() > 8 && pageName.substring(0, 8).compareTo("https://") == 0) {
+				pageName = pageName.substring(8);
+			}
 			String dbkey = Pattern.compile("[.\\/]").matcher(key).replaceAll(m -> "-")
 					+ "." + pageName.replace('.', '_').replace('/', '.');
 			if (key != "" && !pageDb.containsKey(dbkey)) {
